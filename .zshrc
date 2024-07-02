@@ -61,10 +61,6 @@ esac
 alias ls='ls --color'
 alias ll="ls -l"
 alias k="kubectl"
-# Aliases
-alias ls='ls --color'
-alias ll="ls -l"
-alias k="kubectl"
 alias sts-archi="assume_role_archi 159264606519"
 alias sts-webex="assume_role_archi 272704544576"
 
