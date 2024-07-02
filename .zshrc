@@ -61,11 +61,11 @@ esac
 alias ls='ls --color'
 alias ll="ls -l"
 alias k="kubectl"
-alias sts-archi="assume_role_archi 159264606519"
-alias sts-webex="assume_role_archi 272704544576"
+alias sts-archi="assume_role 159264606519"
+alias sts-webex="assume_role 272704544576"
 
 # Functions
-assume_role_archi() {
+assume_role() {
     local account_number="$1"
 
     unset AWS_SECRET_ACCESS_KEY
