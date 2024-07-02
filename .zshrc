@@ -47,10 +47,6 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 
-# Aliases
-alias ls='ls --color'
-alias ll="ls -l"
-
 # fzf
 eval "$(fzf --zsh)"
 
@@ -60,3 +56,8 @@ case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
+
+# Aliases
+alias ls='ls --color'
+alias ll="ls -l"
+alias k="kubectl"
