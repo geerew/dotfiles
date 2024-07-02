@@ -1,0 +1,32 @@
+{
+  "workbench.iconTheme": "material-icon-theme",
+
+  // Font
+  "editor.fontFamily": "'JetbrainsMono NF', Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontLigatures": true,
+  "editor.fontWeight": 355,
+
+  // Style
+  "editor.cursorBlinking": "expand",
+
+  // Format
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  },
+
+  // Go
+  "go.toolsManagement.autoUpdate": true,
+  "go.testFlags": ["-v"],
+  "go.coverOnSave": true,
+  "go.coverOnSingleTest": true,
+  "go.coverageDecorator": {
+    "type": "gutter",
+    "coveredHighlightColor": "rgba(64,128,128,0.5)",
+    "uncoveredHighlightColor": "rgba(128,64,64,0.25)",
+    "coveredGutterStyle": "blockgreen",
+    "uncoveredGutterStyle": "blockred"
+  }
+}
