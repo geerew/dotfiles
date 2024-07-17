@@ -61,16 +61,18 @@ esac
 alias ls='ls --color'
 alias ll="ls -l"
 alias k="kubectl"
-alias sts-archi="assume_role 159264606519"
-alias sts-webex="assume_role 272704544576"
+alias kx="kubectx"
+alias sts-jenkins-archi="assume_role 159264606519 role-archipelago-eks-cluster-admin"
+alias sts-jenkins-webex="assume_role 272704544576 role-psf-jenkins-cluster-admin"
 
 # Functions
 assume_role() {
     local account_number="$1"
+    local role="$2"
 
     unset AWS_SECRET_ACCESS_KEY
     unset AWS_ACCESS_KEY_ID
     unset AWS_SESSION_TOKEN
 
-    export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn arn:aws:iam::${account_number}:role/role-archipelago-eks-cluster-admin --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
+    export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn arn:aws:iam::${account_number}:role/${role} --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
 }
