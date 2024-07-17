@@ -1,5 +1,6 @@
 {
   "workbench.iconTheme": "material-icon-theme",
+  "extensions.ignoreRecommendations": true,
 
   // Font
   "editor.fontFamily": "'JetbrainsMono NF', Menlo, Monaco, 'Courier New', monospace",
@@ -10,6 +11,9 @@
   "editor.cursorBlinking": "expand",
 
   // Format
+   "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
