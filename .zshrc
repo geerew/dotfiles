@@ -66,6 +66,10 @@ alias sts-jenkins-archi="assume_role 159264606519 role-archipelago-eks-cluster-a
 alias sts-jenkins-webex="assume_role 272704544576 role-psf-jenkins-cluster-admin"
 
 # Functions
+delete_local_git_branches() {
+    git branch -vv | grep ': gone]'|  grep -v "\*" | awk '{ print $1; }' | xargs -r git branch -d
+}
+
 assume_role() {
     local account_number="$1"
     local role="$2"
