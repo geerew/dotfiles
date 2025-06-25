@@ -22,7 +22,6 @@ fi
 # Ask the user via KDE’s native dialog
 if kdialog --yesno "$QUESTION"; then
     sudo wg-quick "$ACTION" "$IF"
-    # Optional: send a desktop notification of success/failure
     if [[ $? -eq 0 ]]; then
       kdialog --passivepopup "WireGuard ${ACTION} successful" 2
     else
