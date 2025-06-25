@@ -27,6 +27,11 @@ eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.toml)"
 
 # Keybindings
 bindkey -e
+# bindkey '\e[H' beginning-of-line     # Home key
+# bindkey '\e[F' end-of-line           # End key
+# bindkey '^[[1;5C' forward-word       # Ctrl+right arrow
+# bindkey '^[[1;5D' backward-word      # Ctrl+left arrow
+# bindkey '^H'      backward-kill-word # Ctrl+Backspace
 
 # History
 HISTSIZE=5000
