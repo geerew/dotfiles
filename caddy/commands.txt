@@ -1,0 +1,3 @@
+sudo nft -f inet.rules
+sudo cp inet.rules /etc/nftables.conf
+sudo systemctl status nftables
