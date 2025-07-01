@@ -1,0 +1,21 @@
+services:
+  audiobookshelf:
+    container_name: Audiobookshelf
+    image: advplyr/audiobookshelf
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 80 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+    mem_limit: 4g
+    cpu_shares: 768
+    security_opt:
+      - no-new-privileges:true
+    restart: on-failure:5
+    ports:
+      - 13378:80
+    volumes:
+      - /mnt/StorageInner:/audiobooks
+      - /home/mike/Documents/portainer/audiobookshelf/config:/config
+      - /home/mike/Documents/portainer/audiobookshelf/metadata:/metadata
