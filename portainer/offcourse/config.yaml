@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  offcourse:
+    container_name: OffCourse
+    image: geerew/offcourse:beta-v0.0.6
+    restart: unless-stopped
+    volumes:
+      - /home/mike/Documents/portainer/offcourse/data:/offcourse
+      - /mnt/courses/Courses:/courses
+    ports:
+      - 9081:80
