@@ -1,0 +1,24 @@
+{
+    email michaelrbell@ymail.com
+}
+
+books.digitalcloud.me.uk {
+    reverse_proxy localhost:13378
+}
+
+courses.digitalcloud.me.uk {
+    reverse_proxy localhost:9081
+}
+
+tv.digitalcloud.me.uk {
+    reverse_proxy localhost:8096
+}
+
+containers.digitalcloud.me.uk {
+    reverse_proxy localhost:9443 {
+        transport http {
+            tls
+            tls_insecure_skip_verify
+        }
+    }
+}
