@@ -16,6 +16,6 @@ services:
     ports:
       - 13378:80
     volumes:
-      - /mnt/StorageInner:/audiobooks
+      - /mnt/storage:/audiobooks
       - /home/mike/Documents/portainer/audiobookshelf/config:/config
       - /home/mike/Documents/portainer/audiobookshelf/metadata:/metadata
