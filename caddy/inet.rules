@@ -3,9 +3,20 @@ table inet excludeTraffic {
     type filter hook input priority -100; policy accept;
     tcp dport 443 ct mark set 0x00000f41 meta mark set 0x6d6f6c65;
   }
-
+ 
   chain allowOutgoing {
     type route hook output priority -100; policy accept;
     tcp sport 443 ct mark set 0x00000f41 meta mark set 0x6d6f6c65;
+  }
+}
+
+define EXCLUDED_IPS = {
+  34.160.111.145
+}
+
+table inet excludeTraffic {
+  chain excludeOutgoing {
+    type route hook output priority 0; policy accept;
+    ip daddr $EXCLUDED_IPS ct mark set 0x00000f41 meta mark set 0x6d6f6c65;
   }
 }
