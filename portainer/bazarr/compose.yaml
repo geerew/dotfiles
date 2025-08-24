@@ -1,0 +1,16 @@
+---
+services:
+  jellyfin:
+    container_name: Bazarr
+    image: lscr.io/linuxserver/bazarr:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /home/mike/Documents/portainer/bazarr/config:/config
+      - /mnt/media1:/media
+    ports:
+      - 6767:6767     
+    network_mode: host
