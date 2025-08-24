@@ -1,2 +1,5 @@
-*/config/
+*/config/*
 !*/config/.keep
+
+*/metadata/*
+!*/metadata/.keep
