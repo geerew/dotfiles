@@ -1,5 +1,11 @@
 */config/*
-!*/config/.keep
-
 */metadata/*
+*/cache/*
+*/logs/*
+*/data/*
+
+!*/config/.keep
 !*/metadata/.keep
+!*/cache/.keep
+!*/logs/.keep
+!*/data/.keep

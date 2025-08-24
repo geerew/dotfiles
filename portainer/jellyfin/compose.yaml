@@ -1,25 +1,21 @@
-version: "3.9"
-
+---
 services:
   jellyfin:
     container_name: Jellyfin
-    image: jellyfin/jellyfin:latest
+    image: jellyfin/jellyfin:10.11.0-rc5
     restart: unless-stopped
+    user: 1000:1000
+    group_add:
+      - '991'
     volumes:
       - /home/mike/Documents/portainer/jellyfin/config:/config
       - /home/mike/Documents/portainer/jellyfin/cache:/cache
       - /home/mike/Documents/portainer/jellyfin/logs:/logs
       - /mnt/media1:/media
-    runtime: nvidia
     ports:
       - 8096:8096
       - 8920:8920
       - 1900:1900
       - 7359:7359
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
