@@ -1,0 +1,21 @@
+---
+services:
+  qbittorrent:
+    container_name: qBittorrent
+    image: ghcr.io/linuxserver/qbittorrent:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - WEBUI_PORT=9865
+      - TORRENTING_PORT=6881
+    healthcheck:
+     test: curl -f http://localhost:9865/ || exit 1
+    volumes:
+      - /home/mike/Documents/portainer/qbittorrent/config:/config
+      - /home/mike/Downloads/Torrents/:/downloads
+    ports:
+      - 6881:6881
+      - 6881:6881/udp
+      - 9865:9865
+    network_mode: host

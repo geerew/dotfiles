@@ -1,0 +1,17 @@
+---
+services:
+  prowlarr:
+    container_name: Prowlarr
+    image: ghcr.io/linuxserver/prowlarr:latest
+    restart: unless-stopped
+    environment: 
+      - PUID=1000 
+      - PGID=1000
+      - TZ=Europe/London
+    healthcheck:
+     test: curl -f http://localhost:9696/ || exit 1
+    volumes:
+      - /home/mike/Documents/portainer/prowlarr/config:/config
+    ports:
+      - 9696:9696
+    network_mode: host

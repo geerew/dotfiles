@@ -1,0 +1,19 @@
+---
+services:
+  sonarr:
+    container_name: Sonarr
+    image: ghcr.io/linuxserver/sonarr:latest
+    restart: unless-stopped
+    environment: 
+      - PUID=1000 
+      - PGID=1000
+      - TZ=Europe/London
+    healthcheck:
+     test: curl -f http://localhost:8989/ || exit 1
+    volumes:
+      - /home/mike/Documents/portainer/sonarr/config:/config
+      - /mnt/media1:/media
+      - /home/mike/Downloads/Torrents/:/downloads
+    ports:
+      - 8989:8989
+    network_mode: host

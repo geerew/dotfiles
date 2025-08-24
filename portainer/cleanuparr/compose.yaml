@@ -1,0 +1,25 @@
+---
+services:
+  cleanuparr:
+    container_name: cleanuparr
+    image: ghcr.io/cleanuparr/cleanuparr:latest
+    restart: unless-stopped
+    volumes:
+      - /home/mike/Documents/portainer/cleanuparr/config:/config
+      - /home/mike/Downloads/Torrents/:/downloads
+    ports:
+      - 11011:11011
+    environment:
+      - PUID=1000 
+      - PGID=1000
+      - TZ=Europe/London
+      - LOGGING__LOGLEVEL=Verbose
+      - QUEUECLEANER__ENABLED=true
+      - DOWNLOAD_CLIENT=qbittorrent
+      - QBITTORRENT__URL=http://localhost:9865/
+      - QBITTORRENT__USERNAME=xxxx
+      - QBITTORRENT__PASSWORD=xxxx
+      - SONARR__ENABLED=true
+      - SONARR__INSTANCES__0__URL=http://localhost:8989
+      - SONARR__INSTANCES__0__APIKEY=xxxx
+    network_mode: host

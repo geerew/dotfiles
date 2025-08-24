@@ -1,0 +1,106 @@
+---
+services:
+  # Database migration service - runs once to set up tables
+  migrate:
+    image: docker.io/fredrikburmester/streamystats-v2-migrate:latest
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@vectorchord:5432/streamystats
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=streamystats
+      - PGPASSWORD=postgres
+    depends_on:
+      vectorchord:
+        condition: service_healthy
+    restart: "no"
+    networks:
+      - app-network
+
+  nextjs-app:
+    image: docker.io/fredrikburmester/streamystats-v2-nextjs:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:postgres@vectorchord:5432/streamystats
+      - JOB_SERVER_URL=http://job-server:3005
+      - HOSTNAME=0.0.0.0
+    depends_on:
+      vectorchord:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/api/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - app-network
+
+  job-server:
+    image: docker.io/fredrikburmester/streamystats-v2-job-server:latest
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:postgres@vectorchord:5432/streamystats
+      - PORT=3005
+    depends_on:
+      vectorchord:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3005/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - app-network
+
+  vectorchord:
+    image: tensorchord/vchord-postgres:pg17-v0.4.1
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=streamystats
+    volumes:
+      - vectorchord_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U postgres -d streamystats",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - app-network
+
+volumes:
+  vectorchord_data:
+
+networks:
+  app-network:
