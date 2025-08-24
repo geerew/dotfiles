@@ -1,5 +1,4 @@
-version: "3.9"
-
+---
 services:
   offcourse:
     container_name: OffCourse
