@@ -1,0 +1,19 @@
+---
+services:
+  sonarr:
+    container_name: Radarr
+    image: lscr.io/linuxserver/radarr:latest
+    restart: unless-stopped
+    environment: 
+      - PUID=1000 
+      - PGID=1000
+      - TZ=Europe/London
+    healthcheck:
+     test: curl -f http://localhost:8989/ || exit 1
+    volumes:
+      - /home/mike/Documents/portainer/radarr/config:/config
+      - /mnt/media1:/media
+      - /home/mike/Downloads/Torrents/:/downloads
+    ports:
+      - 7878:7878
+    network_mode: host
