@@ -75,6 +75,14 @@ delete_local_git_branches() {
     git branch -vv | grep ': gone]'|  grep -v "\*" | awk '{ print $1; }' | xargs -r git branch -d
 }
 
+timer() {
+  SECONDS=0
+  while true; do
+    printf "\r%02d:%02d:%02d" $((SECONDS/3600)) $((SECONDS%3600/60)) $((SECONDS%60))
+    sleep 1
+  done
+}
+
 assume_role() {
     local account_number="$1"
     local role="$2"
