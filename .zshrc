@@ -67,12 +67,39 @@ alias ls='ls --color'
 alias ll="ls -l"
 alias k="kubectl"
 alias kx="kubectx"
-alias sts-jenkins-archi="assume_role 159264606519 role-archipelago-eks-cluster-admin"
-alias sts-jenkins-webex="assume_role 272704544576 role-psf-jenkins-cluster-admin"
 
 # Functions
 delete_local_git_branches() {
-    git branch -vv | grep ': gone]'|  grep -v "\*" | awk '{ print $1; }' | xargs -r git branch -d
+    git rev-parse --git-dir >/dev/null 2>&1 || { echo "not a git repository" >&2; return 1; }
+    git fetch -p || return 1
+
+    local base=$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null)
+    if [[ -z "$base" ]]; then
+        local candidate
+        for candidate in origin/main origin/master; do
+            git rev-parse -q --verify "$candidate" >/dev/null && { base="$candidate"; break; }
+        done
+    fi
+    [[ -n "$base" ]] || { echo "cannot determine default branch" >&2; return 1; }
+
+    local branch merge_base probe
+    git branch -vv | grep ': gone\]' | grep -v '^[*+]' | awk '{ print $1; }' | while read -r branch; do
+        if git merge-base --is-ancestor "$branch" "$base"; then
+            git branch -d "$branch"
+            continue
+        fi
+
+        # Squash and rebase merges rewrite commits, so the branch tip is never an
+        # ancestor of the base. Replay the branch's cumulative diff as a throwaway
+        # commit and let patch-id matching decide whether it already landed.
+        merge_base=$(git merge-base "$base" "$branch") || continue
+        probe=$(git commit-tree "$branch^{tree}" -p "$merge_base" -m squash-probe) || continue
+        if [[ "$(git cherry "$base" "$probe")" == -* ]]; then
+            git branch -D "$branch"
+        else
+            echo "kept $branch: has changes not in $base (force with: git branch -D $branch)"
+        fi
+    done
 }
 
 timer() {
@@ -81,15 +108,4 @@ timer() {
     printf "\r%02d:%02d:%02d" $((SECONDS/3600)) $((SECONDS%3600/60)) $((SECONDS%60))
     sleep 1
   done
-}
-
-assume_role() {
-    local account_number="$1"
-    local role="$2"
-
-    unset AWS_SECRET_ACCESS_KEY
-    unset AWS_ACCESS_KEY_ID
-    unset AWS_SESSION_TOKEN
-
-    export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role --role-arn arn:aws:iam::${account_number}:role/${role} --role-session-name MySessionName --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken]" --output text))
 }
